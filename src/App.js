@@ -1,9 +1,12 @@
+import React, {useState} from "react";
 import useSWR from 'swr'
+
+import {MAX_POKEMONS_LIMIT, POKEMON_API_BASE_URL} from "./config";
 import PokemonListTemplate from "./components/PokemonListTemplate";
 import PokemonListPaginationTemplate from "./components/PokemonListPaginationTemplate";
-import {useState} from "react";
 import PokemonListLoaderTemplate from "./components/PokemonListLoaderTemplate";
-import {MAX_POKEMONS_LIMIT, POKEMON_API_BASE_URL} from "./config";
+import ErrorTemplate from "./components/ErrorTemplate";
+
 
 function App() {
     function getPokemonListByPageURL(page) {
@@ -32,7 +35,7 @@ function App() {
         setCurrentPage(page)
     }
 
-    if (error) return <div>failed to load</div>
+    if (error) return <ErrorTemplate/>
     return (
         <>
             {data ? <PokemonListTemplate data={data.results}/> : <PokemonListLoaderTemplate/>}

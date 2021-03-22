@@ -1,4 +1,5 @@
 import useSWR from 'swr'
+import PokemonListTemplate from "./components/PokemonListTemplate";
 
 function App() {
 
@@ -19,7 +20,7 @@ function App() {
 
   return (
     <>
-      hello world! {data.count}
+      <PokemonListTemplate data={data.results} />
     </>
   );
 }

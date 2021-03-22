@@ -37,7 +37,7 @@ export default function LayoutTemplate({children}) {
                 <AppBar position={'relative'}>
                     <Toolbar>
                         <Typography variant="h6" noWrap>
-                            Pokemon.list
+                            Pokeclient!
                         </Typography>
                     </Toolbar>
                 </AppBar>

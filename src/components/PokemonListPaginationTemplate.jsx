@@ -13,7 +13,7 @@ export default function PokemonListPaginationTemplate({count, page, onChange}) {
 
 PokemonListPaginationTemplate.propTypes = {
     // Number of pages
-    count: PropTypes.string,
+    count: PropTypes.number,
     // CurrentPage
     page: PropTypes.number,
     // Function to be called when page changes (page:number) => {}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
@@ -7,6 +7,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 
 import PropTypes from 'prop-types'
 import Skeleton from "@material-ui/lab/Skeleton";
+import CardActionArea from "@material-ui/core/CardActionArea";
 
 const POKEMON_IMAGE_HEIGHT = 200
 
@@ -47,30 +48,60 @@ function SkeletonCard() {
     )
 }
 
+/* A normal pokemon card */
 function PokemonCard({name, weight, height, sprites}) {
+
+    /**
+     * Sometimes we don't have some photos of the pokemon in sprites => for these cases we simply normalize the array
+     * @return {[]}
+     * @private
+     */
+    function _normalizeSpritesArray() {
+        const result = []
+
+        if (sprites) {
+            const spritesArray = Object.values(sprites)
+            result.push(sprites.front_default) // A hack — we need to see front of the pokemon on first interaction
+            result.push(...spritesArray.filter(x => typeof x === "string"))
+        } else {
+            result.push(' ')
+        }
+
+        return result
+    }
+
+    function _incrementPictureIndex() {
+        setCurrentPictureIndex(currentPictureIndex => (currentPictureIndex + 1) % normalizedPicturesArray.length)
+    }
 
     const styles = cardStyles()
 
+    const [currentPictureIndex, setCurrentPictureIndex] = useState(0)
+
+    const normalizedPicturesArray = _normalizeSpritesArray()
+
     return (
         <Card variant={'outlined'}>
-            <CardMedia
-                className={styles.media}
-                image={sprites?.front_default}
-                title={name}
-            />
-            <CardContent>
-                <Typography component="h2" variant={'h6'} noWrap>
-                    <p title={name}>
-                        {name}
-                    </p>
-                </Typography>
-                <Typography>
-                    Height: {height}
-                </Typography>
-                <Typography>
-                    Weight: {weight} units
-                </Typography>
-            </CardContent>
+            <CardActionArea onClick={_incrementPictureIndex}>
+                <CardMedia
+                    className={styles.media}
+                    image={normalizedPicturesArray[currentPictureIndex]}
+                    title={name}
+                />
+                <CardContent>
+                    <Typography component="h2" variant={'h6'} noWrap>
+                        <p title={name}>
+                            {name}
+                        </p>
+                    </Typography>
+                    <Typography>
+                        Height: {height}
+                    </Typography>
+                    <Typography>
+                        Weight: {weight} units
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
         </Card>
     )
 }
@@ -84,8 +115,8 @@ export default function PokemonCardTemplate(props) {
 
 PokemonCardTemplate.propTypes = {
     name: PropTypes.string,
-    height: PropTypes.string,
-    weight: PropTypes.string,
+    height: PropTypes.number,
+    weight: PropTypes.number,
     sprites: PropTypes.shape({"front_default": PropTypes.string}),
     // Set this to true if you want to display a skeleton of the card, instead of the card
     skeleton: PropTypes.bool

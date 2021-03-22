@@ -14,7 +14,7 @@ export default function PokemonListTemplate({data}) {
         <Box py={3}>
             <Grid container spacing={3}>
                 {data.map(pokemon => (
-                    <Grid item xs={12} sm={6} lg={3} xl={2} zeroMinWidth>
+                    <Grid key={pokemon?.name} item xs={12} sm={6} lg={3} xl={2} zeroMinWidth>
                         <PokemonCardTemplate {...pokemon} />
                     </Grid>
                     ))

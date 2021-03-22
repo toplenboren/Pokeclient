@@ -6,9 +6,11 @@ import PokemonListTemplate from "./components/PokemonListTemplate";
 import PokemonListPaginationTemplate from "./components/PokemonListPaginationTemplate";
 import PokemonListLoaderTemplate from "./components/PokemonListLoaderTemplate";
 import ErrorTemplate from "./components/ErrorTemplate";
+import LayoutTemplate from "./components/LayoutTemplate";
 
 
 function App() {
+
     function getPokemonListByPageURL(page) {
         return `${POKEMON_API_BASE_URL}/pokemon?limit=${MAX_POKEMONS_LIMIT}&offset=${page * MAX_POKEMONS_LIMIT}`
     }
@@ -17,7 +19,7 @@ function App() {
         const pokemonList = await fetch(getPokemonListByPageURL(page)).then(r => r.json())
         const richPokemonResults = await Promise.all(pokemonList.results.map(pokemonObject => fetch(pokemonObject.url).then(r => r.json())))
 
-        const calculatedPageCount = Math.ceil(pokemonList.count / MAX_POKEMONS_LIMIT)
+        const calculatedPageCount = Math.floor(pokemonList.count / MAX_POKEMONS_LIMIT)
         setTotalPages(calculatedPageCount)
 
         return {
@@ -37,12 +39,10 @@ function App() {
 
     if (error) return <ErrorTemplate/>
     return (
-        <>
+        <LayoutTemplate>
             {data ? <PokemonListTemplate data={data.results}/> : <PokemonListLoaderTemplate/>}
-            <PokemonListPaginationTemplate count={totalPages}
-                                           page={currentPage}
-                                           onChange={_handlePageChange}/>
-        </>
+            <PokemonListPaginationTemplate count={totalPages} page={currentPage} onChange={_handlePageChange}/>
+        </LayoutTemplate>
     );
 }
 

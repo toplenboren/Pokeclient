@@ -1,9 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Pagination from '@material-ui/lab/Pagination';
+import Box from "@material-ui/core/Box";
 
 export default function PokemonListPaginationTemplate({count, page, onChange}) {
-    return <Pagination count={count} page={page} onChange={onChange}/>
+    return (
+        <Box pb={5}>
+            <Pagination count={count} page={page} onChange={onChange} size="small" color="primary" shape="rounded"/>
+        </Box>
+    )
 }
 
 PokemonListPaginationTemplate.propTypes = {

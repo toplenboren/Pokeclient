@@ -10,18 +10,32 @@ import Skeleton from "@material-ui/lab/Skeleton";
 
 const POKEMON_IMAGE_HEIGHT = 200
 
+const cardStyles = makeStyles({
+    media: {
+        marginTop: '1rem',
+        height: POKEMON_IMAGE_HEIGHT,
+        width: 'auto',
+        backgroundSize: 'contain',
+        imageRendering: 'pixelated'
+    },
+})
+
 /** A skeleton of the card */
 function SkeletonCard() {
 
+    const styles = cardStyles()
+
     return (
         <Card variant={'outlined'}>
-            <CardMedia>
+            <CardMedia className={styles.media}>
                 <Skeleton variant={'rect'} height={POKEMON_IMAGE_HEIGHT}/>
             </CardMedia>
             <CardContent>
-                <h6>
+                <Typography variant={'h6'}>
+                <p>
                     <Skeleton variant={'text'}/>
-                </h6>
+                </p>
+                </Typography>
                 <Typography>
                     <Skeleton variant={'text'}/>
                 </Typography>
@@ -35,15 +49,7 @@ function SkeletonCard() {
 
 function PokemonCard({name, weight, height, sprites}) {
 
-    const styles = makeStyles({
-        media: {
-            marginTop: '1rem',
-            height: POKEMON_IMAGE_HEIGHT,
-            width: 'auto',
-            backgroundSize: 'contain',
-            imageRendering: 'pixelated'
-        },
-    })()
+    const styles = cardStyles()
 
     return (
         <Card variant={'outlined'}>
@@ -86,5 +92,6 @@ PokemonCardTemplate.propTypes = {
 }
 
 PokemonCardTemplate.defaultProps = {
-    skeleton: false
+    skeleton: false,
+    name: 'unknown'
 }

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import useSWR from 'swr'
 
 import {MAX_POKEMONS_LIMIT, POKEMON_API_BASE_URL} from "./config";
@@ -17,7 +17,7 @@ function App() {
 
     async function getPokemonListByPage(page) {
         const pokemonList = await fetch(getPokemonListByPageURL(page)).then(r => r.json())
-        const richPokemonResults = await Promise.all(pokemonList.results.map(pokemonObject => fetch(pokemonObject.url).then(r => r.json())))
+        const richPokemonResults = await Promise.all(pokemonList.results.map(pokemonObject => fetch(pokemonObject.url).then(r => r.ok ? r.json() : null).catch(e => {console.log("Fetch error")})))
 
         const calculatedPageCount = Math.floor(pokemonList.count / MAX_POKEMONS_LIMIT)
         setTotalPages(calculatedPageCount)
@@ -33,8 +33,18 @@ function App() {
 
     const {data, error} = useSWR(getPokemonListByPageURL(currentPage), () => getPokemonListByPage(currentPage))
 
+    useEffect(() => {
+        const page = window.location.search.split('page=')[1]
+        if (page) {
+            console.log(page)
+            setCurrentPage(page)
+        }
+    }, [])
+
     function _handlePageChange(e, page) {
         setCurrentPage(page)
+        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?page=' + page
+        window.history.pushState({path: newUrl},'',newUrl);
     }
 
     if (error) return <ErrorTemplate/>

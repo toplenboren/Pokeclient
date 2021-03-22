@@ -7,14 +7,18 @@ import PropTypes from 'prop-types'
  */
 export default function PokemonListTemplate({data}) {
     return (data.map(pokemon => (
-        <p>{pokemon.name}</p>
+        <>
+            <p><b>{pokemon.name}</b></p>
+            <p>{pokemon.height}</p>
+            <p>{pokemon.weight}</p>
+        </>
     )))
 }
 
 PokemonListTemplate.propTypes = {
     data: PropTypes.arrayOf(PropTypes.shape({
         'name': PropTypes.string.isRequired,
-        'age': PropTypes.string,
+        'height': PropTypes.string,
         'weight': PropTypes.string
     }))
 }
